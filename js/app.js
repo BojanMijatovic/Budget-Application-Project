@@ -22,9 +22,9 @@ class UI {
   submitBudgetForm() {
     const value = this.budgetInput.value;
     if (value === '' || value < 0) {
-      this.expenseFeedback.textContent = 'Please insert real values';
-      this.expenseFeedback.classList.add('showItem');
-      let setTime = this.expenseFeedback;
+      this.budgetFeedback.textContent = 'Please insert real values';
+      this.budgetFeedback.classList.add('showItem');
+      let setTime = this.budgetFeedback;
       // remove alert for invalid values
       setTimeout(function () {
         setTime.classList.remove('showItem');
@@ -54,6 +54,57 @@ class UI {
     }
   }
 
+  // submit expense form 
+  submitExpenseForm() {
+    const expenseValue = this.expenseInput.value;
+    const amountValue = this.amountInput.value;
+
+    if (expenseValue.trim() === '' || amountValue.trim() === '' || amountValue < 0) {
+      this.expenseFeedback.textContent = 'Insert real values';
+      this.expenseFeedback.classList.add('showItem');
+
+      let setTime = this.expenseFeedback;
+      setTimeout(function () {
+        setTime.classList.remove('showItem');
+      }, 2000);
+    }
+    else {
+      let amount = parseInt(amountValue);
+      this.expenseInput = '';
+      this.amountInput = '';
+
+      let expense = {
+        id: this.itemID,
+        title: expenseValue,
+        amount: amount
+      }
+      this.itemID++;
+      this.itemList.push(expense);
+      this.addExpense(expense);
+    }
+  }
+
+  // add expense
+  addExpense(expense) {
+    const div = document.createElement('div');
+    div.classList.add('expense');
+    div.innerHTML = `
+      <div class="expense-item d-flex justify-content-between align-items-baseline">
+         <h6 class="expense-title mb-0 text-uppercase list-item">- title</h6>
+         <h5 class="expense-amount mb-0 list-item">amount</h5>
+
+         <div class="expense-icons list-item">
+
+          <a href="#" class="edit-icon mx-2" data-id="${expense.id}">
+           <i class="fas fa-edit"></i>
+          </a>
+          <a href="#" class="delete-icon" data-id="${expense.id}">
+           <i class="fas fa-trash"></i>
+          </a>
+         </div>
+        </div>
+    `;
+  }
 
   //total expenses
   totalExpense() {
@@ -69,27 +120,25 @@ function eventListeners() {
   const expensesForm = document.getElementById('expense-form');
   const expensesList = document.getElementById('expense-list');
 
-
   // create new instance of UI Class
   const ui = new UI();
-
 
   // budget form 
   budgetForm.addEventListener('submit', function (e) {
     e.preventDefault();
     ui.submitBudgetForm();
-  })
+  });
 
   // expense form 
   expensesForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    ui.submitExpenseForm();
   })
 
   // expense form 
   expensesList.addEventListener('click', function (e) {
 
-  })
-
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
