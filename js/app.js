@@ -20,8 +20,48 @@ class UI {
 
   // submit budget form
   submitBudgetForm() {
-
+    const value = this.budgetInput.value;
+    if (value === '' || value < 0) {
+      this.expenseFeedback.textContent = 'Please insert real values';
+      this.expenseFeedback.classList.add('showItem');
+      let setTime = this.expenseFeedback;
+      // remove alert for invalid values
+      setTimeout(function () {
+        setTime.classList.remove('showItem');
+      }, 2000);
+    }
+    else {
+      this.budgetAmount.textContent = value;
+      this.budgetInput.value = '';
+      this.showBalance();
+    };
   }
+
+  // show balance
+  showBalance() {
+    const expense = this.totalExpense();
+    const total = parseInt(this.budgetAmount.textContent) - expense;
+    this.balanceAmount.textContent = total;
+    if (total < 0) {
+      this.balance.classList.remove('showGreen', 'showBlack');
+      this.balance.classList.add('showRed');
+    } else if (total > 0) {
+      this.balance.classList.remove('showBlack', 'showRed');
+      this.balance.classList.add('showGreen');
+    } else {
+      this.balance.classList.remove('showGreen', 'showRed');
+      this.balance.classList.add('showBlack');
+    }
+  }
+
+
+  //total expenses
+  totalExpense() {
+    let total = 10;
+    return total;
+  }
+
+
 }
 
 function eventListeners() {
